@@ -1,88 +1,48 @@
 pipeline {
     agent any
 
-    parameters {
-        choice(
-            name: 'ENVIRONMENT',
-            choices: ['dev', 'qa', 'prod'],
-            description: 'Select the deployment environment'
-        )
-    }
-
     stages {
 
         stage('Checkout') {
             steps {
-                echo 'Checkout Stage: Source code checkout started.'
-                echo 'Source code checkout completed (simulated).'
+                echo 'Checking out source code from GitHub'
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                script {
-                    def appName = 'customer-api'
-                    def appVersion = '1.0.0'
-
-                    echo "Application Name: ${appName}"
-                    echo "Application Version: ${appVersion}"
-                    echo 'Build started from the GitHub-managed Jenkinsfile.'
-                    echo 'Build completed successfully (simulated).'
+                dir('number-guessing-game') {
+                    echo 'Building Java application using Maven'
+                    bat 'mvn clean package -DskipTests'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Test Stage: Application testing started.'
-                echo 'Tests passed (simulated).'
+                dir('number-guessing-game') {
+                    echo 'Running JUnit tests'
+                    bat 'mvn test'
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                script {
-                    def appName = 'customer-api'
-                    def appVersion = '1.0.0'
-                    def environment = params.ENVIRONMENT
-
-                    echo "Application: ${appName}"
-                    echo "Version: ${appVersion}"
-                    echo "Selected Environment: ${environment}"
-
-                    if (environment == 'dev') {
-                        echo 'Development deployment started'
-                    } else if (environment == 'qa') {
-                        echo 'QA deployment started'
-                    } else if (environment == 'prod') {
-                        echo 'Production deployment requires approval'
-                    } else {
-                        error "Invalid environment: ${environment}"
-                    }
-                }
+                echo 'Simulating application deployment'
+                echo 'Deployment completed successfully!'
             }
         }
+    }
 
-        stage('Process Environments') {
-            steps {
-                script {
-                    def environments = ['dev', 'qa', 'prod']
-
-                    environments.each { env ->
-                        echo "Processing environment: ${env}"
-                    }
-                }
-            }
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
         }
-        stage('Build Real Java Game') {
-            steps {
-                dir('number-guessing-game') {
-                    git branch: 'main',
-                        url: 'https://github.com/Ojas991/number-guessing-game.git'
 
-                bat 'mvn clean package'
-                }
-            }
+        failure {
+            echo 'Pipeline failed. Please check the console output.'
         }
     }
 }
