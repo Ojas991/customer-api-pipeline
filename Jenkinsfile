@@ -78,7 +78,7 @@ pipeline {
             steps {
                 dir('number-guessing-game') {
                     git branch: 'main',
-                        url: 'https://github.com/YOUR_USERNAME/number-guessing-game.git'
+                        url: 'https://github.com/Ojas991/number-guessing-game.git'
 
                 bat 'mvn clean package'
                 }
