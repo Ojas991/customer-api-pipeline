@@ -14,7 +14,7 @@ pipeline {
             steps {
                 dir('number-guessing-game') {
                     echo 'Building Java application using Maven'
-                    bat 'mvn clean package -DskipTests'
+                    bat '"D:\\Devops\\tools\\apache-maven-3.10.0-bin\\apache-maven-3.10.0\\bin\\mvn.cmd" clean package -DskipTests'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('number-guessing-game') {
                     echo 'Running JUnit tests'
-                    bat 'mvn test'
+                    bat '"D:\\Devops\\tools\\apache-maven-3.10.0-bin\\apache-maven-3.10.0\\bin\\mvn.cmd" test'
                 }
             }
         }
