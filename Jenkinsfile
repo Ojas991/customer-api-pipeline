@@ -26,7 +26,7 @@ pipeline {
 
                     echo "Application Name: ${appName}"
                     echo "Application Version: ${appVersion}"
-                    echo 'Build started.'
+                    echo 'Build started from the GitHub-managed Jenkinsfile.'
                     echo 'Build completed successfully (simulated).'
                 }
             }
