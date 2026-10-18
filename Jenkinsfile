@@ -74,5 +74,15 @@ pipeline {
                 }
             }
         }
+        stage('Build Real Java Game') {
+            steps {
+                dir('number-guessing-game') {
+                    git branch: 'main',
+                        url: 'https://github.com/YOUR_USERNAME/number-guessing-game.git'
+
+                bat 'mvn clean package'
+                }
+            }
+        }
     }
 }
