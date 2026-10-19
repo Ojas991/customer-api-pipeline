@@ -13,8 +13,11 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Checkout stage started.'
-                echo 'Source code checkout simulated successfully.'
+                echo 'Checking out customer-api Python application from GitHub.'
+
+                checkout scm
+
+                echo 'Source code checkout completed successfully.'
             }
         }
 
@@ -26,16 +29,23 @@ pipeline {
 
                     echo "Application Name: ${appName}"
                     echo "Application Version: ${appVersion}"
-                    echo "Build stage started."
-                    echo 'Application build simulated successfully.'
+                    echo 'Validating Python application.'
+
+                    bat 'python --version'
+                    bat 'python -m py_compile app.py'
+
+                    echo 'Python application validation completed successfully.'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Test stage started.'
-                echo 'Application tests simulated successfully.'
+                echo 'Running actual Python unit tests.'
+
+                bat 'python -m unittest discover -s tests -v'
+
+                echo 'All Python unit tests passed.'
             }
         }
 
@@ -56,7 +66,7 @@ pipeline {
                         error("Invalid environment: ${environment}")
                     }
 
-                    echo 'Deployment simulation completed.'
+                    echo 'Deployment is simulated. No actual deployment performed.'
                 }
             }
         }
@@ -70,6 +80,17 @@ pipeline {
                         echo "Processing environment: ${envName}"
                     }
                 }
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts(
+                    artifacts: 'app.py,tests/*.py',
+                    fingerprint: true
+                )
+
+                echo 'Python application source files archived successfully.'
             }
         }
     }
